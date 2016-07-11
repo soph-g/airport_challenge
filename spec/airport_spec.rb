@@ -54,6 +54,15 @@ describe Airport do
     it 'returns an error if the plane is not in the airport' do
       expect{airport.take_off(plane)}.to(raise_error("No planes"))
     end
+    it 'it does not allow a plane to take off when weather is stormy' do
+      allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { false }
+      allow(plane).to(receive(:land_plane))
+      airport.land(plane)
+      allow(plane).to(receive(:fly))
+      allow(airport.weather).to receive(:stormy?) { true }
+      expect{ airport.take_off(plane) }.to(raise_error("Weather is bad, plane cannot take off"))
+    end
     it 'tells a plane to take off' do
       allow(plane).to(receive(:landed?))
       allow(plane).to(receive(:land_plane))
@@ -63,6 +72,7 @@ describe Airport do
     end
     it 'removes the plane from the planes array' do
       allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { false }
       allow(plane).to(receive(:land_plane))
       allow(plane).to(receive(:fly))
       airport.land(plane)

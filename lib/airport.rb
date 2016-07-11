@@ -18,6 +18,7 @@ class Airport
 
   def take_off(plane)
     fail "No planes" unless find(plane)
+    fail "Weather is bad, plane cannot take off" if weather.stormy?
     plane.fly
     remove(plane)
   end
@@ -35,9 +36,5 @@ class Airport
   def remove(plane)
     planes.delete(plane)
   end
-
-  #def is_stormy?(weather = Weather.new)
-    #weather.stormy?
-  #end
 
 end
