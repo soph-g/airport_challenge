@@ -3,6 +3,7 @@ require "airport"
 describe Airport do
   subject(:airport) { described_class.new }
   let(:plane) { double :plane }
+  let(:weather) { double :weather }
 
   it { is_expected.to(respond_to(:land).with(1).argument) }
   it { is_expected.to(respond_to(:flying?).with(1).argument) }
@@ -10,11 +11,13 @@ describe Airport do
   it { is_expected.to(respond_to(:take_off).with(1).argument) }
   it { is_expected.to(respond_to(:find).with(1).argument) }
   it { is_expected.to(respond_to(:remove).with(1).argument) }
+  #it { is_expected.to(respond_to(:is_stormy?)) }
 
 
   describe '#planes' do
     it 'returns landed planes' do
       allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { false }
       allow(plane).to(receive(:land_plane))
       airport.land(plane)
       expect(airport.planes).to(eq([plane]))
@@ -26,10 +29,24 @@ describe Airport do
       allow(plane).to(receive(:landed?).and_return(true))
       expect{ airport.land(plane) }.to(raise_error("Plane has already landed"))
     end
+    it 'it does not land a plane when weather is stormy' do
+      allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { true }
+      allow(plane).to(receive(:land_plane))
+      expect{ airport.land(plane) }.to(raise_error("Weather is bad, plane cannot land"))
+    end
     it 'lands a plane' do
       allow(plane).to(receive(:landed?).and_return(false))
+      allow(airport.weather).to receive(:stormy?) { false }
       expect(plane).to(receive(:land_plane))
       airport.land(plane)
+    end
+    it 'includes the landed plane in the planes array' do
+      allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { false }
+      allow(plane).to(receive(:land_plane))
+      airport.land(plane)
+      expect(airport.planes).to(eq([plane]))
     end
   end
 
@@ -64,6 +81,7 @@ describe Airport do
   describe '#find' do
     it 'finds the plane in the planes array' do
       allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { false }
       allow(plane).to(receive(:land_plane))
       airport.land(plane)
       expect(airport.find(plane)).to(eq(true))
@@ -80,6 +98,5 @@ describe Airport do
       airport.take_off(plane)
     end
   end
-
 
 end
