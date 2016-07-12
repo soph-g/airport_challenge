@@ -2,19 +2,16 @@ require_relative "plane"
 require_relative "weather"
 
 class Airport
-  attr_reader :planes, :weather
+  attr_reader :planes, :weather, :capacity
 
   DEFAULT_CAPACITY = 20
 
-  def initialize
+  def initialize(capacity = DEFAULT_CAPACITY)
     @planes = []
     @weather = Weather.new
-    @capacity = DEFAULT_CAPACITY
+    @capacity = capacity
   end
 
-  def capacity(amount)
-    @capacity = amount
-  end
 
   def land(plane)
     fail "Plane has already landed" if flying?(plane)
