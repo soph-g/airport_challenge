@@ -39,8 +39,6 @@ Completed user stories:
   So I can get passengers on the way to their destination
   I want to instruct a plane to take off from an airport and confirm that it is no longer in the airport
 
-Attempted user stories:
-
   As an air traffic controller
   To ensure safety
   I want to prevent takeoff when weather is stormy
@@ -48,10 +46,6 @@ Attempted user stories:
   As an air traffic controller
   To ensure safety
   I want to prevent landing when weather is stormy
-
-Successfully created and tested a random weather generator, but ran out of time trying to get this interacting with airport.
-
-Not attempted:
 
   As an air traffic controller
   To ensure safety
@@ -67,7 +61,7 @@ Not attempted:
 irb
 require './lib/airport.rb'
 plane = Plane.new
-airport = Airport.new
+airport = Airport.new #change pass capacity as an argument.
 airport.land(plane) #lands the given plane at the airport
 airport.planes #returns landed planes
 airport.take_off(plane) #the given plane will take off from the airport.
