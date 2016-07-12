@@ -11,8 +11,21 @@ describe Airport do
   it { is_expected.to(respond_to(:take_off).with(1).argument) }
   it { is_expected.to(respond_to(:find).with(1).argument) }
   it { is_expected.to(respond_to(:remove).with(1).argument) }
-  #it { is_expected.to(respond_to(:is_stormy?)) }
+  it { is_expected.to(respond_to(:capacity).with(1).argument) }
 
+  describe '#capacity' do
+    it 'has a default capacity of 20 planes' do
+      allow(airport.weather).to receive(:stormy?) { false }
+      20.times { airport.land(Plane.new) }
+      expect{ airport.land(Plane.new) }.to(raise_error("Airport is full"))
+    end
+    it 'can be changed to a new capacity' do
+      airport.capacity(50)
+      allow(airport.weather).to receive(:stormy?) { false }
+      50.times { airport.land(Plane.new) }
+      expect{ airport.land(Plane.new) }.to(raise_error("Airport is full"))
+    end
+  end
 
   describe '#planes' do
     it 'returns landed planes' do
@@ -101,6 +114,7 @@ describe Airport do
   describe '#remove' do
     it 'removes the plane from the planes array' do
       allow(plane).to(receive(:landed?))
+      allow(airport.weather).to receive(:stormy?) { false }
       allow(plane).to(receive(:land_plane))
       allow(plane).to(receive(:fly))
       airport.land(plane)
