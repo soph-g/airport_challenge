@@ -61,7 +61,7 @@ Completed user stories:
 irb
 require './lib/airport.rb'
 plane = Plane.new
-airport = Airport.new #change pass capacity as an argument.
+airport = Airport.new #can pass a new capacity as an argument.
 airport.land(plane) #lands the given plane at the airport
 airport.planes #returns landed planes
 airport.take_off(plane) #the given plane will take off from the airport.
